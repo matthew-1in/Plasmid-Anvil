@@ -1,0 +1,237 @@
+PLASMID&ANVIL CHANGELOG
+Newest first. One entry per version number; changes that ship without a number
+bump fold into the entry above them.
+
+
+v5.2
+Construction files read as well as write, and three fixes to what v5.1 shipped.
+
+- A construction file can be pasted in and becomes the pipeline it describes: one card per step,
+  wired together, with the sequences it declares dropped into the slots, and capsule templates
+  saved under Saved capsules. Anything that cannot be read is reported with the line it is on
+  and what is wrong with it, rather than a blank refusal. The reader takes tabs or spaces, the
+  SOE and PCA lines this app writes as comments, and untyped declarations, so a file exported
+  here comes back as the pipeline it left as.
+- Slots that were added can be taken off again. The x on an empty fragment, enzyme or necessary
+  input removes that slot, down to the number a fresh card of that kind comes with; on a filled
+  slot it still only clears what is in it.
+- The information button on a capsule card opened nothing. A stray name in the dialog's title
+  threw before the dialog was built, so the capsule flowchart never appeared; the same fault
+  stopped Show capsule flowchart in the inspector and Show flowchart on a saved capsule.
+- Export view wraps a long name onto the next line and grows the box to fit, instead of cutting
+  it short, and a box can be clicked to select its step exactly as a bubble can in standard
+  view. The drawing itself is unchanged, and a downloaded SVG still carries no selection.
+
+
+v5.1
+Capsules: a whole pipeline packaged as one card, and flowcharts you can put in a report.
+
+- A pipeline can be turned into a capsule. Every slot the pipeline had filled itself becomes an
+  input on the front of one card, the wiring between the steps is kept inside, and running it
+  hands back the products you chose when you made it. A capsule behaves like any other
+  experiment card: it can be stacked into a pipeline, and it can go inside another capsule.
+- Capsules are saved under Saved capsules on the Cloning tab, with folders of their own. A card
+  carries its own copy of what is inside it, so deleting the stored capsule does not break work
+  already on the bench, and reordering a card's inner steps changes that card alone.
+- A capsule is written in a construction file as a template: a header line naming the capsule
+  and its inputs, the steps it is made of (referring to those inputs, and to intermediateN for
+  anything made and used on the way), and a Product line naming what comes back. A pipeline that
+  uses a capsule writes every template it needs first, innermost capsule first, then calls the
+  capsule like any other step, ending in the product name or a comma-separated list of them.
+  Both line shapes are this app's extension to the format: a file that calls a capsule runs here
+  and not in the C6 reference, which knows the operations rather than capsules.
+- Capsule cards carry the same information button as a pipeline, with the flowchart of the steps
+  inside and the same order and input controls.
+- Flowcharts have a second view. Export view redraws the same graph as an engineering flowchart:
+  rectangular boxes, straight lines, right angles throughout, black on white, each box listing
+  what it takes in and what it makes. Download SVG saves that drawing. A capsule in the chart is
+  drawn once as its own labelled flowchart above and appears as a single step below.
+
+
+v5.0
+Reviewed for professional laboratory use against the C6 construction-file reference
+(github.com/UCB-BioE-Anderson-Lab/C6-Multiplatform) and the primary literature. Every
+submission and decision is written up in REVIEW-v5.0.md.
+
+- Ligation now models the 5' phosphate. T4 ligase seals a 5' phosphate to a 3' hydroxyl, so
+  one side of every join has to carry one. Digest fragments arrive phosphorylated; a strand you
+  wrote or amplified does not, and a new control in its inspector adds or removes them. This
+  changes outcomes: re-ligating the fragments of a linear digest now gives the linear molecule
+  rather than a phantom circle, which is what the reference gives and what the bench gives.
+- PCR requires 18 bases of exact 3' match, the figure the reference uses, and refuses a primer
+  that binds the template in more than one place instead of silently returning the first
+  product.
+- Golden Gate refuses a part carrying extra sites for the enzyme, naming their positions,
+  rather than quietly cutting at the wrong one; and refuses a palindromic junction overhang,
+  which would assemble in either orientation.
+- Exported construction files run in the reference implementation. Sequences are declared with
+  their type, so a plasmid stays circular and an assembly step is not handed a single strand;
+  digest fragments are numbered from zero as the format specifies, not from one; and SOE and
+  PCA, which the format has no operation for, are written as comments with their product
+  declared, so the rest of the file still simulates.
+- Designed primers grow until they reach 55 C rather than stopping at a flat 20 bases, and the
+  card reports each primer's melting temperature.
+- Ribosome binding sites are called ahead of GTG and TTG starts as well as ATG, which between
+  them begin about one E. coli gene in nine.
+- The library tabs fit their panel, the two databank buttons and the Sanger button say what
+  they do in words, Golden Gate no longer claims every Type IIS enzyme leaves four bases, and a
+  Sanger verdict's alignment gets room to be read.
+
+
+v4.7
+- Sanger reads. Open an .ab1 and the chromatogram opens with it: the four dye traces, the base
+  called at each peak, and a readout under the pointer giving each nucleotide's share of the
+  signal at that point and the confidence of the nearest call. Pick a range or view the whole
+  read, and lay the confidence of each call or the dye signal at each peak behind the traces
+  as bars.
+- Auto-analyze grades a read against the strand it should be: Perfect, Point mutation,
+  Deletion / insertion / other sequence, Perfect partial, or Bad read, with the position of
+  every change and of anything the read could not reach.
+- DNA Strider (.str) files open, and constructs and parts export as .str.
+- The desktop download is built from the page the site is serving right now rather than from
+  the tab you have open, so a tab left open for a week still hands you the current build.
+- The match line between two aligned sequences sat two characters to the right of the bases it
+  was about. It lines up now, in both pairwise alignments and BLAST hits.
+- Pressing Enter in the registry or enzyme search puts every match on screen at once rather
+  than a page at a time.
+
+
+v4.6
+- The iGEM Registry search reaches every match. The list used to stop at the 300 most-used
+  parts; it now grows a page at a time as you scroll, so a search that finds thousands of parts
+  can be scrolled through all the way down.
+- New enzyme databank beside My enzymes: every restriction enzyme REBASE lists with a
+  recognition sequence, searchable by name, organism or site, filterable to the ones whose cut
+  is known, the ones a supplier sells, and the iGEM assembly-standard enzymes. Keep one and it
+  lands in My enzymes ready to drag onto a strand.
+- Recognition sites may now use the full IUPAC alphabet, so an enzyme like AccI (GT[AC][GT]AC)
+  matches the bases it really means. Strands and parts are still A, C, G, T and N only.
+- The sync light goes green again as soon as the file is written. It was repainted only when a
+  change was queued, so it sat amber after every save.
+
+
+v4.5
+- The whole iGEM Registry rides along in the page, compressed: all 77,314 parts searchable from
+  the Parts tab, with the sequence of every part up to 1,000 bp bundled. Keep one and it lands
+  in My Parts as ordinary sequence.
+- New Auto-annotate computation: strips a strand's annotations and reads a fresh set off the
+  sequence, with a checklist for which structural features to look for and boxes for exact
+  copies of registry or My Parts.
+- The sync file is written on a heartbeat as well as on change, and closing the tab or the app
+  with work it hasn't seen warns first.
+- Downloading the app checks it's handing out this build, and offers to update a copy you
+  already have by swapping only the page inside it rather than fetching the whole thing again.
+
+
+v4.4
+- Reverse SOE and Reverse PCA join the reverse-engineering cards, both checked by running the
+  design forwards.
+- Experiments refuse to run on anything but A, C, G, T and N, and treat N as a wild card in
+  strands, parts and recognition sites alike.
+- Drop an enzyme on a strand and you can now map its binding sites instead of cutting.
+- Details panel folds away and comes back from a corner button, light and dark switch from its
+  workbench tab, and you can type a magnification.
+- Editor: click an annotation for its part info, translate in any of the six reading frames,
+  and the protein wraps instead of running off the popup. New icon, saved dates on library rows,
+  and the downloaded .exe offers to replace the copy you already have.
+
+
+v4.3
+- Non-standard bases (anything but A, T, C, G or N) now glow neon red in the editor.
+- Find has three modes: Search (N is a wild card, in your query and in the strand),
+  Exact search, and Mismatch search with a mismatch budget you set.
+- Library and workbench sync outside Claude too: every window on the machine stays in
+  step, plus an optional sync file in a shared folder for browser-to-desktop.
+- SnapGene .dna maps open and edit like any other file; strand diagrams export as
+  PNG and JPEG alongside SVG.
+- New brand mark, transparent background. Descriptions rewritten tighter, em dashes
+  gone. "ParseFasta" leftovers in GenBank output renamed to Plasmid&Anvil.
+
+
+v4.2
+- Sidebars resize by dragging their inner edge, widths remembered, double-click to
+  reset, arrow keys for fine work.
+- The downloaded .exe is standalone: its own WebView2 window, no browser borrowed.
+- That window remembers where it was left, and a second copy focuses the first.
+- Inside the desktop app the self-download button hides itself.
+
+
+v4.1
+- Desktop app, two ways: a one-file .exe built in the browser, and an Electron build
+  in desktop/ around the same page.
+- Library rows drag into a new order, and the same gesture files them into folders.
+- Saved computations replace auto-kept results, coming back with inputs and result.
+- Folders now cover saved experiments and computations too.
+- Inspector copy reworked: "Inputs" and a proper Run line.
+
+
+v4.0
+- Reverse engineering cards: Reverse PCR, Digest, Gibson and Golden Gate, each checked
+  by running the design forwards.
+- Library folders for parts and constructs, nameable, collapsible, with a bio.
+- Clicking a part inside a strand opens it once the strand is showing.
+- The brand mark became the tab icon, installed from script.
+- Fixed: PCR on a circular template added a whole turn to amplicons off the origin.
+
+
+v3.5
+- Digest fragments numbered from 1, matching the card's own menu.
+- Merged-card flowchart scales to fit, with a size slider and a Fit button.
+- Flowchart arrows hold up at any step count, long dependencies routed in their own lane.
+
+
+v3.4
+- SOE and PCA cloning experiments, order- and orientation-independent.
+- Recent computations deletable from their row.
+- Saved experiments, custom enzymes and saved constructs renameable from the inspector.
+
+
+v3.3
+- Drag anything on the bench onto the trash, which takes over the library panel mid-drag.
+- Custom enzymes split into their own "My enzymes" list, and are deletable.
+- Workbench saves to and opens from a .paa file, in Replace or Add mode.
+
+
+v3.2
+- A card is now id plus steps, so steps reorder and parallel branches work.
+- Step flowchart showing bindings as arrows, editable live.
+- Clicking a piece inside a card opens its own inspector.
+- Parts drag into a strand, insertion point read off the diagram.
+
+
+v3.1
+- Digest experiment card: one strand, any number of enzymes, a picker for which
+  fragment carries on.
+- Cards merge on 30% area overlap, with a confirmation.
+- Per-base colour for A/T/C/G in the editor.
+
+
+v3.0
+- Ligation experiment: sticky and blunt ends, auto-flipping, self-circularisation.
+- Chained cards merge into one stacked card that runs top-down and splits again.
+- Slot inputs are consumed into the card, inspectable and copyable from inside it.
+- Example constructs moved to an undeletable starter kit.
+
+
+v2.3
+- Preloaded example constructs, clear-all, copy and paste of bench pieces.
+- Finer zoom and left-drag zoom, Copy RC, N-to-base picker.
+- Editor polish: pinned picker, find and replace, comment leader lines.
+
+
+v2.2
+- Computations: alignment, BLAST and profile, with saved results.
+- Comments in the nucleotide editor.
+
+
+v2
+- Free-floating objects, marquee multi-select, enzyme sprites.
+- Drag-and-drop experiment cards (PCR, Golden Gate, Gibson) with chaining.
+- Double-stranded editor with overhangs, N bases and CDS translation.
+- Drag-an-enzyme digests, custom enzymes, construction-file export.
+
+
+v1
+- Workbench, parts library, circular and linear diagrams.
+- GenBank and FASTA in and out.
+- Single-strand nucleotide editor.
